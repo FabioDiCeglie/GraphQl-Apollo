@@ -18,20 +18,6 @@ export const Link = objectType({
   },
 });
 
-let links: NexusGenObjects["Link"][] = [
-  // 1
-  {
-    id: 1,
-    url: "www.howtographql.com",
-    description: "Fullstack tutorial for GraphQL",
-  },
-  {
-    id: 2,
-    url: "graphql.org",
-    description: "GraphQL official website",
-  },
-];
-
 export const LinkQuery = extendType({
   // 2
   type: "Query",
@@ -41,7 +27,7 @@ export const LinkQuery = extendType({
       type: "Link",
       resolve(parent, args, context, info) {
         // 4
-        return links;
+        return context.prisma.link.findMany();
       },
     });
   },
@@ -57,11 +43,15 @@ export const LinkQueryById = extendType({
       args: {
         id: nonNull(intArg()),
       },
-      //@ts-ignore
+
       resolve(parent, args, context, info) {
         const { id } = args;
 
-        return links.find((link) => link.id === Number(id));
+        const findLinkById = context.prisma.link.findUnique({
+          where: { id: id },
+        });
+
+        return findLinkById;
       },
     });
   },
@@ -82,15 +72,14 @@ export const LinkMutation = extendType({
 
       resolve(parent, args, context) {
         const { description, url } = args; // 4
+        const newLink = context.prisma.link.create({
+          data: {
+            description: description,
+            url: url,
+          },
+        });
 
-        let idCount = links.length + 1; // 5
-        const link = {
-          id: idCount,
-          description: description,
-          url: url,
-        };
-        links.push(link);
-        return link;
+        return newLink;
       },
     });
   },
