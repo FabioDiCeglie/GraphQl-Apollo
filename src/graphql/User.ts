@@ -19,32 +19,3 @@ export const User = objectType({
     });
   },
 });
-
-// export const UserMutation = extendType({
-//   // 1
-//   type: "Mutation",
-//   definition(t) {
-//     t.nonNull.field("post", {
-//       // 2
-//       type: "User",
-//       args: {
-//         // 3
-//         name: nonNull(stringArg()),
-//         email: nonNull(stringArg()),
-//         password: nonNull(stringArg()),
-//       },
-//       resolve(parent, args, context) {
-//         const { name, email, password } = args; // 4
-//         const newUser = context.prisma.user.create({
-//           data: {
-//             name: name,
-//             email: email,
-//             password: password,
-//           },
-//         });
-
-//         return newUser;
-//       },
-//     });
-//   },
-// });
