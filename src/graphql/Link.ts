@@ -1,4 +1,11 @@
-import { extendType, objectType, nonNull, stringArg } from "nexus";
+import {
+  extendType,
+  objectType,
+  nonNull,
+  stringArg,
+  idArg,
+  intArg,
+} from "nexus";
 import { NexusGenObjects } from "../../nexus-typegen";
 
 export const Link = objectType({
@@ -35,6 +42,26 @@ export const LinkQuery = extendType({
       resolve(parent, args, context, info) {
         // 4
         return links;
+      },
+    });
+  },
+});
+
+export const LinkQueryById = extendType({
+  // 2
+  type: "Query",
+  definition(t) {
+    t.field("link", {
+      // 3
+      type: "Link",
+      args: {
+        id: nonNull(intArg()),
+      },
+      //@ts-ignore
+      resolve(parent, args, context, info) {
+        const { id } = args;
+
+        return links.find((link) => link.id === Number(id));
       },
     });
   },
