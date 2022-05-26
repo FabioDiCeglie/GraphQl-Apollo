@@ -71,13 +71,20 @@ export const LinkMutation = extendType({
       },
       resolve(parent, args, context) {
         const { description, url } = args;
+        const { userId } = context;
+
+        if (!userId) {
+          throw new Error("Cannot post without logging in.");
+        }
+
         const newLink = context.prisma.link.create({
-          // 2
           data: {
-            description: description,
-            url: url,
+            description,
+            url,
+            postedBy: { connect: { id: userId } },
           },
         });
+
         return newLink;
       },
     });
