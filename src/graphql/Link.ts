@@ -12,10 +12,18 @@ export const Link = objectType({
       type: "User",
       resolve(parent, args, context) {
         // 2
-        console.log(parent.id);
+
         return context.prisma.link
           .findUnique({ where: { id: parent.id } })
           .postedBy();
+      },
+    });
+    t.nonNull.list.nonNull.field("voters", {
+      type: "User",
+      resolve(parent, args, context) {
+        return context.prisma.link
+          .findUnique({ where: { id: parent.id } })
+          .voters();
       },
     });
   },
