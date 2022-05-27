@@ -1,4 +1,4 @@
-name: hack--fabio-10 # 1
+name: hack-fabio # 1
 
 on:
   push:
