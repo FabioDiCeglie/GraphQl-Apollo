@@ -41,20 +41,29 @@ export const Link = objectType({
   },
 });
 
+export const Feed = objectType({
+  name: "Feed",
+  definition(t) {
+    t.nonNull.list.nonNull.field("links", { type: Link }); // 1
+    t.nonNull.int("count"); // 2
+    t.id("id"); // 3
+  },
+});
+
 export const LinkQuery = extendType({
   // 2
   type: "Query",
   definition(t) {
-    t.nonNull.list.nonNull.field("feed", {
+    t.nonNull.field("feed", {
       // 3
-      type: "Link",
+      type: "Feed",
       args: {
         filter: stringArg(),
         skip: intArg(),
         take: intArg(),
         orderBy: arg({ type: list(nonNull(LinkOrderByInput)) }),
       },
-      resolve(parent, args, context, info) {
+      async resolve(parent, args, context, info) {
         const where = args.filter
           ? {
               OR: [
@@ -65,14 +74,24 @@ export const LinkQuery = extendType({
               ],
             }
           : {};
-        // 4
-        return context.prisma.link.findMany({
+
+        const links = await context.prisma.link.findMany({
           where,
           skip: args?.skip as number | undefined,
           take: args?.take as number | undefined,
-          orderBy:
-            args?.orderBy as Prisma.Enumerable<Prisma.LinkOrderByWithRelationInput>,
+          orderBy: args?.orderBy as
+            | Prisma.Enumerable<Prisma.LinkOrderByWithRelationInput>
+            | undefined,
         });
+
+        const count = await context.prisma.link.count({ where });
+        const id = `main-feed:${JSON.stringify(args)}`;
+        // 4
+        return {
+          links,
+          count,
+          id,
+        };
       },
     });
   },
