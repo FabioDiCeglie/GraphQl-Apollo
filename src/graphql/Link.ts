@@ -1,4 +1,12 @@
-import { extendType, objectType, nonNull, stringArg, intArg } from "nexus";
+import {
+  extendType,
+  objectType,
+  nonNull,
+  stringArg,
+  intArg,
+  inputObjectType,
+  enumType,
+} from "nexus";
 
 export const Link = objectType({
   name: "Link", // 1
@@ -117,4 +125,18 @@ export const LinkMutation = extendType({
       },
     });
   },
+});
+
+export const LinkOrderByInput = inputObjectType({
+  name: "LinkOrderByInput",
+  definition(t) {
+    t.field("description", { type: Sort });
+    t.field("url", { type: Sort });
+    t.field("createdAt", { type: Sort });
+  },
+});
+
+export const Sort = enumType({
+  name: "Sort",
+  members: ["asc", "desc"],
 });

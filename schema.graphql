@@ -21,6 +21,12 @@ type Link {
   voters: [User!]!
 }
 
+input LinkOrderByInput {
+  createdAt: Sort
+  description: Sort
+  url: Sort
+}
+
 type Mutation {
   login(email: String!, password: String!): AuthPayload!
   post(description: String!, url: String!): Link!
@@ -31,6 +37,11 @@ type Mutation {
 type Query {
   feed(filter: String, skip: Int, take: Int): [Link!]!
   link(id: Int!): Link
+}
+
+enum Sort {
+  asc
+  desc
 }
 
 type User {
