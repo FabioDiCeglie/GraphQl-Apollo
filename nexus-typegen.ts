@@ -180,6 +180,7 @@ export interface NexusGenArgTypes {
   Query: {
     feed: { // args
       filter?: string | null; // String
+      orderBy?: NexusGenInputs['LinkOrderByInput'][] | null; // [LinkOrderByInput!]
       skip?: number | null; // Int
       take?: number | null; // Int
     }

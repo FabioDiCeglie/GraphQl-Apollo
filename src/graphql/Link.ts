@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import {
   extendType,
   objectType,
@@ -6,6 +7,8 @@ import {
   intArg,
   inputObjectType,
   enumType,
+  arg,
+  list,
 } from "nexus";
 
 export const Link = objectType({
@@ -49,6 +52,7 @@ export const LinkQuery = extendType({
         filter: stringArg(),
         skip: intArg(),
         take: intArg(),
+        orderBy: arg({ type: list(nonNull(LinkOrderByInput)) }),
       },
       resolve(parent, args, context, info) {
         const where = args.filter
@@ -66,6 +70,8 @@ export const LinkQuery = extendType({
           where,
           skip: args?.skip as number | undefined,
           take: args?.take as number | undefined,
+          orderBy:
+            args?.orderBy as Prisma.Enumerable<Prisma.LinkOrderByWithRelationInput>,
         });
       },
     });
