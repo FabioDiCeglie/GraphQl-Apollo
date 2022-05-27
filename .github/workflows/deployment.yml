@@ -1,4 +1,4 @@
-name: deploy-hackernews-app-heroku # 1
+name: hack-app # 1
 
 on:
   push:
